@@ -16,7 +16,7 @@ namespace CCNUAutoLogin.WinForm
         {
             InitializeComponent();
             this.password.PasswordChar = '*';
-            this.ShowInTaskbar = false;
+            this.ShowInTaskbar = true;
             this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             var config = FillUiByConfig();
             if (config == null)
@@ -137,9 +137,18 @@ namespace CCNUAutoLogin.WinForm
             if (Verify(config))
             {
                 AppConfigIO.Write(config);
-                _autoLoginService.UpdateConfig(config);
+                if (_autoLoginService == null)
+                {
+                    _autoLoginService = new AutoLoginService(config);
+                    _autoLoginService?.Start();
+                }
+                else
+                {
+                    _autoLoginService.UpdateConfig(config);
+                }
                 AutoStartup.Set(true);
                 TriggerShowOrHide();
+                MessageBox.Show("信息保存成功！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
