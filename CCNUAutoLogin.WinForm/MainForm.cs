@@ -21,43 +21,22 @@ namespace CCNUAutoLogin.WinForm
             var config = FillUiByConfig();
             if (config == null)
             {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
+                ShowForm();
+            }
+            else
+            {
+                HideForm();
             }
 
             _autoLoginService?.Start();
 
             configApp.Click += ConfigApp_Click;
             exitApp.Click += ExitApp_Click;
-        }
-
-        private void ExitApp_Click(object sender, EventArgs e)
-        {
-            this.Activate();
-            //右键退出事件
-            if (MessageBox.Show("是否需要关闭程序？", "提示:", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)//出错提示
-            {
-                //关闭窗口
-                DialogResult = DialogResult.No;
-                Dispose();
-                Close();
-            }
-        }
-
-        private void ConfigApp_Click(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
-            }
+            loginManual.Click += LoginManual_Click;
         }
 
         private string _schNetType = "联通";
         private string _connectType = "无线";
-        private bool _disableBtnSave = true;
 
         private readonly List<string> _schNetTypes = new List<string>()
         {
@@ -104,11 +83,53 @@ namespace CCNUAutoLogin.WinForm
             return config;
         }
 
+        #region 右键菜单事件
+
+        private void LoginManual_Click(object sender, EventArgs e)
+        {
+            if (_autoLoginService != null)
+            {
+                var isSuccess = _autoLoginService?.LoginManual();
+                var msg = isSuccess ? "手动登陆成功！" : "手动登陆失败！";
+                MessageBox.Show(this, msg, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show(this, "请先配置登陆信息！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+        }
+
+        private void ExitApp_Click(object sender, EventArgs e)
+        {
+            this.Activate();
+            //右键退出事件
+            if (MessageBox.Show(this, "是否需要关闭程序？", "提示:", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)//出错提示
+            {
+                //关闭窗口
+                DialogResult = DialogResult.No;
+                Dispose();
+                Close();
+            }
+        }
+
+        private void ConfigApp_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                ShowForm();
+            }
+        }
+
+        #endregion
+
+        #region 主窗口事件
+
         private void appNotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)//判断鼠标的按键
             {
-                //点击时判断form是否显示,显示就隐藏,隐藏就显示
+                // 点击时判断form是否显示,显示就隐藏,隐藏就显示
                 TriggerShowOrHide();
             }
         }
@@ -147,7 +168,6 @@ namespace CCNUAutoLogin.WinForm
             if (Verify(config))
             {
                 var configPath = AppConfigIO.Write(config);
-
                 if (_autoLoginService == null)
                 {
                     _autoLoginService = new AutoLoginService(config);
@@ -157,15 +177,17 @@ namespace CCNUAutoLogin.WinForm
                 {
                     _autoLoginService.UpdateConfig(config);
                 }
-                MessageBox.Show($"信息保存成功！{Environment.NewLine} {configPath}", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MessageBox.Show(this, $"信息保存成功！{Environment.NewLine} {configPath}", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 if (AutoStartup.Set(true))
                 {
-                    TriggerShowOrHide();
+                    // TriggerShowOrHide();
+                    HideForm();
                 }
                 else
                 {
-                    var dialogResult = MessageBox.Show("开机自启动需要管理员的权限，是否以管理员权限运行？", "提示", MessageBoxButtons.YesNo,
+                    var dialogResult = MessageBox.Show(this, "开机自启动需要管理员的权限，是否以管理员权限运行？", "提示", MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question);
                     if (dialogResult == DialogResult.Yes)
                     {
@@ -176,6 +198,8 @@ namespace CCNUAutoLogin.WinForm
                 }
             }
         }
+
+        #endregion
 
         /// <summary>
         /// 验证config是否有效
@@ -207,7 +231,7 @@ namespace CCNUAutoLogin.WinForm
             if (messages.Count > 0)
             {
                 var msg = string.Join(Environment.NewLine, messages);
-                MessageBox.Show(msg, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, msg, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
 
@@ -218,28 +242,49 @@ namespace CCNUAutoLogin.WinForm
         {
             if (this.WindowState == FormWindowState.Normal)
             {
-                this.WindowState = FormWindowState.Minimized;
-                this.Hide();
+                HideForm();
             }
             else if (this.WindowState == FormWindowState.Minimized)
             {
-                this.Show();
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
+                ShowForm();
             }
         }
+
+        /// <summary>
+        /// 显示Form
+        /// </summary>
+        private void ShowForm()
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+            this.Activate();
+        }
+
+        /// <summary>
+        /// 隐藏Form
+        /// </summary>
+        private void HideForm()
+        {
+            this.WindowState = FormWindowState.Minimized;
+            this.Hide();
+        }
+
+        #region override
 
         protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;
-            TriggerShowOrHide();
+            // TriggerShowOrHide();
+            HideForm();
         }
 
         protected override void OnClosed(EventArgs e)
         {
             _autoLoginService?.Dispose();
             base.OnClosed(e);
-        }
+        } 
+
+        #endregion
     }
 
     static class Extensions

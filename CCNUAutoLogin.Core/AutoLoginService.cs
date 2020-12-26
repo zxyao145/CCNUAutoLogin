@@ -40,14 +40,14 @@ namespace CCNUAutoLogin.Core
             _loginService = null;
         }
 
-        public void UpdateConfig(AppConfig config)
+        public bool UpdateConfig(AppConfig config)
         {
             _loginService?.Logout();
             _config = config;
-            AutoLogin();
+            return AutoLogin();
         }
 
-        private void AutoLogin()
+        private bool AutoLogin()
         {
             var retryTimes = 5;
             bool isSuccess = false;
@@ -80,6 +80,14 @@ namespace CCNUAutoLogin.Core
                     LogHelper.WriteError($"尝试自动登陆5次后失败");
                 }
             }
+
+            if (isSuccess) return true;
+            return SchoolNetLoginServiceBase.IsOnline();
+        }
+
+        public bool LoginManual()
+        {
+            return AutoLogin();
         }
 
         public void Dispose()
