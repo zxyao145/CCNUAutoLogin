@@ -9,6 +9,8 @@ namespace CCNUAutoLogin.Core
 {
     public class Utils
     {
+        public static string RealStartupDir { get; set; }
+
         public static string ExecutablePath { get; set; }
         public static int RunAsAdmin(string arguments = "")
         {
@@ -17,7 +19,8 @@ namespace CCNUAutoLogin.Core
             {
                 Verb = "runas", 
                 FileName = ExecutablePath,
-                Arguments = arguments
+                Arguments = arguments,
+                UseShellExecute = true
             };
             try
             {
@@ -27,16 +30,11 @@ namespace CCNUAutoLogin.Core
             {
                 return -1;
             }
-            if (process != null)
-            {
-                process.WaitForExit();
-            }
 
             if (process != null)
             {
-                int ret = process.ExitCode;
                 process.Close();
-                return ret;
+                return 0;
             }
             return -1;
         }

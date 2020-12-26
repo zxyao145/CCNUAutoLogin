@@ -9,7 +9,7 @@ namespace CCNUAutoLogin.Core
         static LogHelper()
         {
             //var appDir = Path.GetTempPath();
-            var appDir = AppContext.BaseDirectory;
+            var appDir = Utils.RealStartupDir; // AppContext.BaseDirectory
             LogsDir = Path.Combine(appDir, "./CCNUAutoLoginLogs");
             Directory.CreateDirectory(LogsDir);
         }

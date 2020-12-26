@@ -27,6 +27,32 @@ namespace CCNUAutoLogin.WinForm
             }
 
             _autoLoginService?.Start();
+
+            configApp.Click += ConfigApp_Click;
+            exitApp.Click += ExitApp_Click;
+        }
+
+        private void ExitApp_Click(object sender, EventArgs e)
+        {
+            this.Activate();
+            //右键退出事件
+            if (MessageBox.Show("是否需要关闭程序？", "提示:", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)//出错提示
+            {
+                //关闭窗口
+                DialogResult = DialogResult.No;
+                Dispose();
+                Close();
+            }
+        }
+
+        private void ConfigApp_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+                this.Activate();
+            }
         }
 
         private string _schNetType = "联通";
@@ -85,22 +111,6 @@ namespace CCNUAutoLogin.WinForm
                 //点击时判断form是否显示,显示就隐藏,隐藏就显示
                 TriggerShowOrHide();
             }
-            else if (e.Button == MouseButtons.Right)
-            {
-                //右键退出事件
-                if (MessageBox.Show("是否需要关闭程序？", "提示:", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)//出错提示
-                {
-                    //关闭窗口
-                    DialogResult = DialogResult.No;
-                    Dispose();
-                    Close();
-                }
-            }
-        }
-
-        private void appNotifyIcon_MouseClick(object sender, MouseEventArgs e)
-        {
-            
         }
 
         private void OnNetTypeChanged(object sender, EventArgs e)
@@ -136,7 +146,8 @@ namespace CCNUAutoLogin.WinForm
 
             if (Verify(config))
             {
-                AppConfigIO.Write(config);
+                var configPath = AppConfigIO.Write(config);
+
                 if (_autoLoginService == null)
                 {
                     _autoLoginService = new AutoLoginService(config);
@@ -146,9 +157,23 @@ namespace CCNUAutoLogin.WinForm
                 {
                     _autoLoginService.UpdateConfig(config);
                 }
-                AutoStartup.Set(true);
-                TriggerShowOrHide();
-                MessageBox.Show("信息保存成功！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"信息保存成功！{Environment.NewLine} {configPath}", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (AutoStartup.Set(true))
+                {
+                    TriggerShowOrHide();
+                }
+                else
+                {
+                    var dialogResult = MessageBox.Show("开机自启动需要管理员的权限，是否以管理员权限运行？", "提示", MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        Utils.RunAsAdmin("true");
+                        Dispose();
+                        Close();
+                    }
+                }
             }
         }
 

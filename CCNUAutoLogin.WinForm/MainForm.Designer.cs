@@ -32,6 +32,9 @@ namespace CCNUAutoLogin.WinForm
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.appNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.appNotificationContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.configApp = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitApp = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.schoolNum = new System.Windows.Forms.TextBox();
             this.labelPwd = new System.Windows.Forms.Label();
@@ -45,17 +48,40 @@ namespace CCNUAutoLogin.WinForm
             this.radioButton7 = new System.Windows.Forms.RadioButton();
             this.radioButton8 = new System.Windows.Forms.RadioButton();
             this.btnSave = new System.Windows.Forms.Button();
+            this.appNotificationContextMenuStrip.SuspendLayout();
             this.netTypePanel.SuspendLayout();
             this.connectTypePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // appNotifyIcon
             // 
+            this.appNotifyIcon.ContextMenuStrip = this.appNotificationContextMenuStrip;
             this.appNotifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("appNotifyIcon.Icon")));
             this.appNotifyIcon.Text = "CCNUAutoLogin";
             this.appNotifyIcon.Visible = true;
-            this.appNotifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.appNotifyIcon_MouseClick);
             this.appNotifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.appNotifyIcon_MouseDoubleClick);
+            // 
+            // appNotificationContextMenuStrip
+            // 
+            this.appNotificationContextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.appNotificationContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.configApp,
+            this.exitApp});
+            this.appNotificationContextMenuStrip.Name = "appNotificationContextMenuStrip";
+            this.appNotificationContextMenuStrip.Size = new System.Drawing.Size(109, 52);
+            this.appNotificationContextMenuStrip.Text = "CCNUAutoLogin";
+            // 
+            // configApp
+            // 
+            this.configApp.Name = "configApp";
+            this.configApp.Size = new System.Drawing.Size(108, 24);
+            this.configApp.Text = "设置";
+            // 
+            // exitApp
+            // 
+            this.exitApp.Name = "exitApp";
+            this.exitApp.Size = new System.Drawing.Size(108, 24);
+            this.exitApp.Text = "退出";
             // 
             // label1
             // 
@@ -206,6 +232,7 @@ namespace CCNUAutoLogin.WinForm
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CCNUAutoLogin";
             this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+            this.appNotificationContextMenuStrip.ResumeLayout(false);
             this.netTypePanel.ResumeLayout(false);
             this.netTypePanel.PerformLayout();
             this.connectTypePanel.ResumeLayout(false);
@@ -231,5 +258,8 @@ namespace CCNUAutoLogin.WinForm
         private System.Windows.Forms.RadioButton radioButton7;
         private System.Windows.Forms.RadioButton radioButton8;
         private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.ContextMenuStrip appNotificationContextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem configApp;
+        private System.Windows.Forms.ToolStripMenuItem exitApp;
     }
 }

@@ -2,13 +2,25 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <SignAssembly>false</SignAssembly>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <AssemblyName>CCNUAutoLogin</AssemblyName>
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
+    <Authors>zxyao</Authors>
+    <Company>zxyao</Company>
+    <Description>CCNU campus network
+
+ automatic login
+
+</Description>
+    <Copyright>MIT</Copyright>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CCNUAutoLogin.Core\CCNUAutoLogin.Core.csproj" />

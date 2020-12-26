@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security;
+using System.Security.Permissions;
 using System.Text;
 
 namespace CCNUAutoLogin.Core
@@ -12,22 +13,17 @@ namespace CCNUAutoLogin.Core
     /// </summary>
     public class AutoStartup
     {
-        static string Key = "CCNUAutoLogin_" + AppContext.BaseDirectory.GetHashCode();
-        static string RegistryRunPath = (IntPtr.Size == 4 
-            ? @"Software\Microsoft\Windows\CurrentVersion\Run" 
+        static string Key = "CCNUAutoLogin";
+        static string RegistryRunPath = (IntPtr.Size == 4
+            ? @"Software\Microsoft\Windows\CurrentVersion\Run"
             : @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run");
-
-        public static void SetStartupPath(string startupPath)
-        {
-            Key = "CCNUAutoLogin_" + startupPath.GetHashCode();
-        }
 
         public static bool Set(bool enabled)
         {
             RegistryKey runKey = null;
             try
             {
-                string path = AppContext.BaseDirectory;
+                string path = Utils.ExecutablePath; // AppContext.BaseDirectory
                 runKey = Registry.LocalMachine.OpenSubKey(RegistryRunPath, true);
                 if (runKey != null)
                 {
@@ -46,12 +42,11 @@ namespace CCNUAutoLogin.Core
             }
             catch (SecurityException e)
             {
-                Utils.RunAsAdmin();
                 return false;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                LogHelper.WriteError($"AutoStartup: {e.Message}");
                 return false;
             }
             finally
@@ -64,7 +59,7 @@ namespace CCNUAutoLogin.Core
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        LogHelper.WriteError($"AutoStartup: {e.Message}");
                     }
                 }
             }
@@ -76,7 +71,7 @@ namespace CCNUAutoLogin.Core
             RegistryKey runKey = null;
             try
             {
-                string path = AppContext.BaseDirectory;
+                string path = Utils.ExecutablePath; // AppContext.BaseDirectory
                 runKey = Registry.LocalMachine.OpenSubKey(RegistryRunPath, true);
                 if (runKey != null)
                 {
@@ -96,6 +91,7 @@ namespace CCNUAutoLogin.Core
             }
             catch (Exception e)
             {
+                LogHelper.WriteError($"AutoStartup: {e.Message}");
                 return false;
             }
             finally
@@ -108,7 +104,7 @@ namespace CCNUAutoLogin.Core
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        LogHelper.WriteError($"AutoStartup: {e.Message}");
                     }
                 }
             }
@@ -119,8 +115,6 @@ namespace CCNUAutoLogin.Core
             RegistryKey runKey = null;
             try
             {
-                string path = AppContext.BaseDirectory;
-
                 runKey = Registry.LocalMachine.OpenSubKey(RegistryRunPath, false);
                 string[] runList = runKey.GetValueNames();
                 runKey.Close();
@@ -133,6 +127,7 @@ namespace CCNUAutoLogin.Core
             }
             catch (Exception e)
             {
+                LogHelper.WriteError($"AutoStartup: {e.Message}");
                 return false;
             }
             finally
@@ -145,7 +140,7 @@ namespace CCNUAutoLogin.Core
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        LogHelper.WriteError($"AutoStartup: {e.Message}");
                     }
                 }
             }

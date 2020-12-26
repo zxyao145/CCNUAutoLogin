@@ -10,14 +10,15 @@ namespace CCNUAutoLogin.Core
     {
         private static string GetDefaultConfigPath()
         {
-            return Path.Combine(AppContext.BaseDirectory, "config.json");
+            return Path.Combine(Utils.RealStartupDir, "config.json");
         }
 
-        public static void Write(AppConfig config, string configPath = null)
+        public static string Write(AppConfig config, string configPath = null)
         {
             configPath ??= GetDefaultConfigPath();
             using StreamWriter sw = new StreamWriter(configPath);
             sw.Write(JSON.Serialize(config, new Options(true)));
+            return configPath;
         }
 
         public static AppConfig Read(string configPath = null)
