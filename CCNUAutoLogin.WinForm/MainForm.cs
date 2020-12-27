@@ -3,21 +3,25 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using CCNUAutoLogin.Core;
+using Jil;
 
 namespace CCNUAutoLogin.WinForm
 {
     public partial class MainForm : Form
     {
         private AutoLoginService _autoLoginService;
+        private bool _isAutoStartup = false;
         public MainForm()
         {
             InitializeComponent();
             this.password.PasswordChar = '*';
             this.ShowInTaskbar = true;
             this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            CheckIsAutoStartup();
             var config = FillUiByConfig();
             if (config == null)
             {
@@ -33,7 +37,34 @@ namespace CCNUAutoLogin.WinForm
             configApp.Click += ConfigApp_Click;
             exitApp.Click += ExitApp_Click;
             loginManual.Click += LoginManual_Click;
+            autoStartup.Click += AutoStartup_Click;
         }
+
+        private void CheckIsAutoStartup()
+        {
+            var appConfigFile = Path.Combine(Utils.RealStartupDir, "app.config");
+            if (File.Exists(appConfigFile))
+            {
+                var appConfig = AppConfigIO.Read<AppConfig>("app.config");
+                _isAutoStartup = appConfig.AutoStartup;
+            }
+            else
+            {
+                var config = new AppConfig
+                {
+                    AutoStartup = false
+                };
+                var savePath = AppConfigIO.Write<AppConfig>(config, "app.config");
+            }
+
+            SetAutoStartupMenuItemText();
+        }
+
+        private void SetAutoStartupMenuItemText()
+        {
+            autoStartup.Text = _isAutoStartup ? "[√]开机启动" : "[x]开机启动";
+        }
+
 
         private string _schNetType = "联通";
         private string _connectType = "无线";
@@ -47,7 +78,7 @@ namespace CCNUAutoLogin.WinForm
             "有线","无线"
         };
 
-        private AppConfig FillUiByConfig()
+        private LoginConfig FillUiByConfig()
         {
             var config = AppConfigIO.Read();
             if (config != null)
@@ -85,11 +116,34 @@ namespace CCNUAutoLogin.WinForm
 
         #region 右键菜单事件
 
+        /// <summary>
+        /// 开启启动
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AutoStartup_Click(object sender, EventArgs e)
+        {
+            _isAutoStartup = !_isAutoStartup;
+            SetAutoStartupMenuItemText();
+
+            if (!AutoStartup.Set(_isAutoStartup))
+            {
+                var dialogResult = MessageBox.Show(this, "设置或取消开机启动需要管理员的权限，是否以管理员权限运行？", "提示", MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    Utils.RunAsAdmin(_isAutoStartup ? "true" : "false");
+                    Dispose();
+                    Close();
+                }
+            }
+        }
+
         private void LoginManual_Click(object sender, EventArgs e)
         {
             if (_autoLoginService != null)
             {
-                var isSuccess = _autoLoginService?.LoginManual();
+                var isSuccess = _autoLoginService.LoginManual();
                 var msg = isSuccess ? "手动登陆成功！" : "手动登陆失败！";
                 MessageBox.Show(this, msg, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -157,7 +211,7 @@ namespace CCNUAutoLogin.WinForm
         /// <param name="e"></param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            var config = new AppConfig()
+            var config = new LoginConfig()
             {
                 SchNum = schoolNum.Text,
                 Password = password.Text,
@@ -180,20 +234,28 @@ namespace CCNUAutoLogin.WinForm
 
                 MessageBox.Show(this, $"信息保存成功！{Environment.NewLine} {configPath}", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                if (AutoStartup.Set(true))
+                if (!_isAutoStartup)
                 {
-                    // TriggerShowOrHide();
-                    HideForm();
-                }
-                else
-                {
-                    var dialogResult = MessageBox.Show(this, "开机自启动需要管理员的权限，是否以管理员权限运行？", "提示", MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
-                    if (dialogResult == DialogResult.Yes)
+                    if (AutoStartup.Set(true))
                     {
-                        Utils.RunAsAdmin("true");
-                        Dispose();
-                        Close();
+                        // TriggerShowOrHide();
+                        _isAutoStartup = true;
+                        AppConfigIO.Write<AppConfig>(new AppConfig
+                        {
+                            AutoStartup = _isAutoStartup
+                        }, "app.config");
+                        HideForm();
+                    }
+                    else
+                    {
+                        var dialogResult = MessageBox.Show(this, "开机自启动需要管理员的权限，是否以管理员权限运行？", "提示", MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            Utils.RunAsAdmin("true");
+                            Dispose();
+                            Close();
+                        }
                     }
                 }
             }
@@ -206,7 +268,7 @@ namespace CCNUAutoLogin.WinForm
         /// </summary>
         /// <param name="config"></param>
         /// <returns>true：有效；false：无效</returns>
-        private bool Verify(AppConfig config)
+        private bool Verify(LoginConfig config)
         {
             var messages = new List<string>();
             if (config.SchNum.IsNullOrWhiteSpace())

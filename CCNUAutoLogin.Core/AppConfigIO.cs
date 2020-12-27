@@ -8,22 +8,36 @@ namespace CCNUAutoLogin.Core
 {
     public class AppConfigIO
     {
-        private static string GetDefaultConfigPath()
+        private static string GetDefaultConfigPath(string configFileName = "config.json")
         {
-            return Path.Combine(Utils.RealStartupDir, "config.json");
+            return Path.Combine(Utils.RealStartupDir, configFileName);
         }
 
-        public static string Write(AppConfig config, string configPath = null)
+        /// <summary>
+        /// login config
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="configPath"></param>
+        /// <returns></returns>
+        public static string Write(LoginConfig config, string configPath = null)
         {
-            configPath ??= GetDefaultConfigPath();
-            using StreamWriter sw = new StreamWriter(configPath);
-            sw.Write(JSON.Serialize(config, new Options(true)));
-            return configPath;
+            return Write<LoginConfig>(config, "config.json");
         }
 
-        public static AppConfig Read(string configPath = null)
+        /// <summary>
+        /// login config
+        /// </summary>
+        /// <param name="configPath"></param>
+        /// <returns></returns>
+        public static LoginConfig Read(string configPath = null)
         {
-            configPath ??= GetDefaultConfigPath();
+            return Read<LoginConfig>("config.json");
+        }
+
+
+        public static T Read<T>(string configFileName)
+        {
+            var configPath = GetDefaultConfigPath(configFileName);
             if (File.Exists(configPath))
             {
                 string jsonInfo;
@@ -32,12 +46,19 @@ namespace CCNUAutoLogin.Core
                     jsonInfo = sr.ReadToEnd();
                 }
 
-                AppConfig config = JSON.Deserialize<AppConfig>(jsonInfo);
+                T config = JSON.Deserialize<T>(jsonInfo);
                 return config;
             }
 
-            return null;
+            return default(T);
         }
 
+        public static string Write<T>(T config, string configFileName)
+        {
+            var configPath = GetDefaultConfigPath(configFileName);
+            using StreamWriter sw = new StreamWriter(configPath);
+            sw.Write(JSON.Serialize<T>(config, new Options(true)));
+            return configPath;
+        }
     }
 }

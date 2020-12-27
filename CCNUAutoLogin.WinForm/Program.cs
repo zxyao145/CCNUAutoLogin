@@ -31,15 +31,15 @@ namespace CCNUAutoLogin.WinForm
             bool isAdmin = winPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
             if (isAdmin)
             {
-                bool autoStartup = false;
                 if (args != null && args.Length > 0)
                 {
-                    autoStartup = Convert.ToBoolean(args[0]);
-                }
-
-                if (autoStartup)
-                {
-                    AutoStartup.Set(true);
+                    var autoStartup = Convert.ToBoolean(args[0]);
+                    AutoStartup.Set(autoStartup);
+                    var config = new AppConfig
+                    {
+                        AutoStartup = autoStartup
+                    };
+                    var savePath = AppConfigIO.Write<AppConfig>(config, "app.config");
                 }
             }
             Application.Run(new MainForm());

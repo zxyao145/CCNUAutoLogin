@@ -9,7 +9,7 @@ namespace CCNUAutoLogin.Core
 {
     public interface ISchoolNetLoginService
     {
-        public bool Login(AppConfig config);
+        public bool Login(LoginConfig config);
         public bool Logout();
     }
 
@@ -73,7 +73,7 @@ namespace CCNUAutoLogin.Core
         }
 
 
-        protected string BuildUserName(AppConfig config)
+        protected string BuildUserName(LoginConfig config)
         {
             if (config.SchNetType.Contains("电信"))
             {
@@ -90,7 +90,7 @@ namespace CCNUAutoLogin.Core
             return config.SchNum;
         }
 
-        public abstract bool Login(AppConfig config);
+        public abstract bool Login(LoginConfig config);
 
         public abstract bool Logout();
 
@@ -108,7 +108,7 @@ namespace CCNUAutoLogin.Core
 
     public class SchoolNetLoginServiceFactory
     {
-        public static ISchoolNetLoginService Create(AppConfig config)
+        public static ISchoolNetLoginService Create(LoginConfig config)
         {
             if (config.ConnectType == "有线")
             {

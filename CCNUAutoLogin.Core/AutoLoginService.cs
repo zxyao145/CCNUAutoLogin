@@ -5,12 +5,12 @@ namespace CCNUAutoLogin.Core
 {
     public class AutoLoginService:IDisposable
     {
-        public AutoLoginService(AppConfig config)
+        public AutoLoginService(LoginConfig config)
         {
             _config = config;
         }
         private Timer _timer;
-        private AppConfig _config;
+        private LoginConfig _config;
         private ISchoolNetLoginService _loginService;
 
         public void Start()
@@ -40,7 +40,7 @@ namespace CCNUAutoLogin.Core
             _loginService = null;
         }
 
-        public bool UpdateConfig(AppConfig config)
+        public bool UpdateConfig(LoginConfig config)
         {
             _loginService?.Logout();
             _config = config;
@@ -87,7 +87,7 @@ namespace CCNUAutoLogin.Core
 
         public bool LoginManual()
         {
-            return AutoLogin();
+            return SchoolNetLoginServiceBase.IsOnline() || AutoLogin();
         }
 
         public void Dispose()

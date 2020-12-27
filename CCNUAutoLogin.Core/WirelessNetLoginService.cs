@@ -11,7 +11,7 @@ namespace CCNUAutoLogin.Core
     /// </summary>
     public class WirelessNetLoginService : SchoolNetLoginServiceBase
     {
-        public override bool Login(AppConfig config)
+        public override bool Login(LoginConfig config)
         {
             var userName = BuildUserName(config);
             NameValueCollection values = new NameValueCollection

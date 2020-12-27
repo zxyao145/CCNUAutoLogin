@@ -10,7 +10,7 @@ namespace CCNUAutoLogin.Core
     /// </summary>
     public class WiredNetLoginService : SchoolNetLoginServiceBase
     {
-        public override bool Login(AppConfig config)
+        public override bool Login(LoginConfig config)
         {
             var userName = BuildUserName(config);
             var suffix = "0";

@@ -2,23 +2,25 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <SignAssembly>false</SignAssembly>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <AssemblyName>CCNUAutoLogin</AssemblyName>
     <ApplicationIcon>Resources\logo.ico</ApplicationIcon>
     <Authors>zxyao</Authors>
-    <Company>zxyao</Company>
-    <Description>CCNU campus network
+    <Description>CCNU campus network automatic login</Description>
+    <Copyright>Copyright © 2020 zxyao All Rights Reserved</Copyright>
+    <Version>0.1.0</Version>
+    <NeutralLanguage>zh</NeutralLanguage>
+  </PropertyGroup>
 
- automatic login
-
-</Description>
-    <Copyright>MIT</Copyright>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>5</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
   </ItemGroup>
 

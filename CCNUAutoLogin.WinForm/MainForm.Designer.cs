@@ -34,6 +34,8 @@ namespace CCNUAutoLogin.WinForm
             this.appNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.appNotificationContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.configApp = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoStartup = new System.Windows.Forms.ToolStripMenuItem();
+            this.loginManual = new System.Windows.Forms.ToolStripMenuItem();
             this.exitApp = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.schoolNum = new System.Windows.Forms.TextBox();
@@ -48,7 +50,6 @@ namespace CCNUAutoLogin.WinForm
             this.radioButton7 = new System.Windows.Forms.RadioButton();
             this.radioButton8 = new System.Windows.Forms.RadioButton();
             this.btnSave = new System.Windows.Forms.Button();
-            this.loginManual = new System.Windows.Forms.ToolStripMenuItem();
             this.appNotificationContextMenuStrip.SuspendLayout();
             this.netTypePanel.SuspendLayout();
             this.connectTypePanel.SuspendLayout();
@@ -67,10 +68,11 @@ namespace CCNUAutoLogin.WinForm
             this.appNotificationContextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.appNotificationContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.configApp,
+            this.autoStartup,
             this.loginManual,
             this.exitApp});
             this.appNotificationContextMenuStrip.Name = "appNotificationContextMenuStrip";
-            this.appNotificationContextMenuStrip.Size = new System.Drawing.Size(139, 76);
+            this.appNotificationContextMenuStrip.Size = new System.Drawing.Size(139, 100);
             this.appNotificationContextMenuStrip.Text = "CCNUAutoLogin";
             // 
             // configApp
@@ -78,6 +80,18 @@ namespace CCNUAutoLogin.WinForm
             this.configApp.Name = "configApp";
             this.configApp.Size = new System.Drawing.Size(138, 24);
             this.configApp.Text = "设置";
+            // 
+            // autoStartup
+            // 
+            this.autoStartup.Name = "autoStartup";
+            this.autoStartup.Size = new System.Drawing.Size(138, 24);
+            this.autoStartup.Text = "开机启动";
+            // 
+            // loginManual
+            // 
+            this.loginManual.Name = "loginManual";
+            this.loginManual.Size = new System.Drawing.Size(138, 24);
+            this.loginManual.Text = "手动登陆";
             // 
             // exitApp
             // 
@@ -216,12 +230,6 @@ namespace CCNUAutoLogin.WinForm
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // loginManual
-            // 
-            this.loginManual.Name = "loginManual";
-            this.loginManual.Size = new System.Drawing.Size(138, 24);
-            this.loginManual.Text = "手动登陆";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -270,5 +278,6 @@ namespace CCNUAutoLogin.WinForm
         private System.Windows.Forms.ToolStripMenuItem configApp;
         private System.Windows.Forms.ToolStripMenuItem exitApp;
         private System.Windows.Forms.ToolStripMenuItem loginManual;
+        private System.Windows.Forms.ToolStripMenuItem autoStartup;
     }
 }
