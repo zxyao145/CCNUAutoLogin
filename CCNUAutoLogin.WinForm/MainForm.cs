@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -15,6 +16,18 @@ namespace CCNUAutoLogin.WinForm
     {
         private AutoLoginService _autoLoginService;
         private bool _isAutoStartup = false;
+        private string _schNetType = "联通";
+        private string _connectType = "无线";
+
+        private readonly List<string> _schNetTypes = new List<string>()
+        {
+            "校园网","联通","移动","电信"
+        };
+        private readonly List<string> _connectTypes = new List<string>()
+        {
+            "有线","无线"
+        };
+
         public MainForm()
         {
             InitializeComponent();
@@ -38,8 +51,12 @@ namespace CCNUAutoLogin.WinForm
             exitApp.Click += ExitApp_Click;
             loginManual.Click += LoginManual_Click;
             autoStartup.Click += AutoStartup_Click;
+            openConfigDir.Click += OpenConfigDir_Click;
         }
-
+        
+        /// <summary>
+        /// 根据配置文件检查是否已经设置了开机启动
+        /// </summary>
         private void CheckIsAutoStartup()
         {
             var appConfigFile = Path.Combine(Utils.RealStartupDir, "app.config");
@@ -60,24 +77,18 @@ namespace CCNUAutoLogin.WinForm
             SetAutoStartupMenuItemText();
         }
 
+        /// <summary>
+        /// 修改开机启动的显示文字
+        /// </summary>
         private void SetAutoStartupMenuItemText()
         {
             autoStartup.Text = _isAutoStartup ? "[√]开机启动" : "[x]开机启动";
         }
 
-
-        private string _schNetType = "联通";
-        private string _connectType = "无线";
-
-        private readonly List<string> _schNetTypes = new List<string>()
-        {
-            "校园网","联通","移动","电信"
-        };
-        private readonly List<string> _connectTypes = new List<string>()
-        {
-            "有线","无线"
-        };
-
+        /// <summary>
+        /// 根据设置填充UI
+        /// </summary>
+        /// <returns></returns>
         private LoginConfig FillUiByConfig()
         {
             var config = AppConfigIO.Read();
@@ -139,6 +150,29 @@ namespace CCNUAutoLogin.WinForm
             }
         }
 
+        /// <summary>
+        /// 打开配置文件目录
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenConfigDir_Click(object sender, EventArgs e)
+        {
+            var file = Path.Combine(Utils.RealStartupDir, "config.json");
+            if (File.Exists(file))
+            {
+                Process.Start("Explorer", "/select," + file);
+            }
+            else
+            {
+                Process.Start("Explorer", Utils.RealStartupDir);
+            }
+        }
+
+        /// <summary>
+        /// 手动登陆
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LoginManual_Click(object sender, EventArgs e)
         {
             if (_autoLoginService != null)
@@ -154,6 +188,11 @@ namespace CCNUAutoLogin.WinForm
             }
         }
 
+        /// <summary>
+        /// 退出程序
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ExitApp_Click(object sender, EventArgs e)
         {
             this.Activate();
@@ -167,6 +206,11 @@ namespace CCNUAutoLogin.WinForm
             }
         }
 
+        /// <summary>
+        /// 打开配置界面
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ConfigApp_Click(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
@@ -300,6 +344,11 @@ namespace CCNUAutoLogin.WinForm
             return true;
         }
 
+        #region 窗体状态切换
+
+        /// <summary>
+        /// 切换显示或隐藏状态
+        /// </summary>
         private void TriggerShowOrHide()
         {
             if (this.WindowState == FormWindowState.Normal)
@@ -330,6 +379,8 @@ namespace CCNUAutoLogin.WinForm
             this.WindowState = FormWindowState.Minimized;
             this.Hide();
         }
+
+        #endregion
 
         #region override
 

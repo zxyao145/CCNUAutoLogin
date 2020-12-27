@@ -34,6 +34,7 @@ namespace CCNUAutoLogin.WinForm
             this.appNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.appNotificationContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.configApp = new System.Windows.Forms.ToolStripMenuItem();
+            this.openConfigDir = new System.Windows.Forms.ToolStripMenuItem();
             this.autoStartup = new System.Windows.Forms.ToolStripMenuItem();
             this.loginManual = new System.Windows.Forms.ToolStripMenuItem();
             this.exitApp = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,35 +69,42 @@ namespace CCNUAutoLogin.WinForm
             this.appNotificationContextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.appNotificationContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.configApp,
+            this.openConfigDir,
             this.autoStartup,
             this.loginManual,
             this.exitApp});
             this.appNotificationContextMenuStrip.Name = "appNotificationContextMenuStrip";
-            this.appNotificationContextMenuStrip.Size = new System.Drawing.Size(139, 100);
+            this.appNotificationContextMenuStrip.Size = new System.Drawing.Size(199, 124);
             this.appNotificationContextMenuStrip.Text = "CCNUAutoLogin";
             // 
             // configApp
             // 
             this.configApp.Name = "configApp";
-            this.configApp.Size = new System.Drawing.Size(138, 24);
+            this.configApp.Size = new System.Drawing.Size(198, 24);
             this.configApp.Text = "设置";
+            // 
+            // openConfigDir
+            // 
+            this.openConfigDir.Name = "openConfigDir";
+            this.openConfigDir.Size = new System.Drawing.Size(198, 24);
+            this.openConfigDir.Text = "打开配置文件目录";
             // 
             // autoStartup
             // 
             this.autoStartup.Name = "autoStartup";
-            this.autoStartup.Size = new System.Drawing.Size(138, 24);
+            this.autoStartup.Size = new System.Drawing.Size(198, 24);
             this.autoStartup.Text = "开机启动";
             // 
             // loginManual
             // 
             this.loginManual.Name = "loginManual";
-            this.loginManual.Size = new System.Drawing.Size(138, 24);
+            this.loginManual.Size = new System.Drawing.Size(198, 24);
             this.loginManual.Text = "手动登陆";
             // 
             // exitApp
             // 
             this.exitApp.Name = "exitApp";
-            this.exitApp.Size = new System.Drawing.Size(138, 24);
+            this.exitApp.Size = new System.Drawing.Size(198, 24);
             this.exitApp.Text = "退出";
             // 
             // label1
@@ -242,6 +250,7 @@ namespace CCNUAutoLogin.WinForm
             this.Controls.Add(this.labelPwd);
             this.Controls.Add(this.schoolNum);
             this.Controls.Add(this.label1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
@@ -279,5 +288,6 @@ namespace CCNUAutoLogin.WinForm
         private System.Windows.Forms.ToolStripMenuItem exitApp;
         private System.Windows.Forms.ToolStripMenuItem loginManual;
         private System.Windows.Forms.ToolStripMenuItem autoStartup;
+        private System.Windows.Forms.ToolStripMenuItem openConfigDir;
     }
 }
