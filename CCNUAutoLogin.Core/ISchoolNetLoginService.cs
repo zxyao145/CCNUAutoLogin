@@ -9,17 +9,35 @@ namespace CCNUAutoLogin.Core
 {
     public interface ISchoolNetLoginService
     {
+        /// <summary>
+        /// 校园网 登陆
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public bool Login(LoginConfig config);
+
+        /// <summary>
+        /// 校园网 退出登陆
+        /// </summary>
+        /// <returns></returns>
         public bool Logout();
     }
 
     public abstract class SchoolNetLoginServiceBase : ISchoolNetLoginService
     {
+        /// <summary>
+        /// 网络是否在线
+        /// </summary>
+        /// <returns></returns>
         internal static bool IsOnline()
         {
             return PingBaidu();
         }
 
+        /// <summary>
+        /// ping www.baidu.com
+        /// </summary>
+        /// <returns></returns>
         private static bool PingBaidu()
         {
             try
@@ -72,7 +90,11 @@ namespace CCNUAutoLogin.Core
             }
         }
 
-
+        /// <summary>
+        /// 根据不同运营商构建用户名
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         protected string BuildUserName(LoginConfig config)
         {
             if (config.SchNetType.Contains("电信"))
@@ -94,7 +116,12 @@ namespace CCNUAutoLogin.Core
 
         public abstract bool Logout();
 
-
+        /// <summary>
+        /// 登陆成功监测
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="html"></param>
+        /// <returns></returns>
         protected bool LoginCheck(byte[] data, out string html)
         {
             html = data != null
@@ -108,6 +135,11 @@ namespace CCNUAutoLogin.Core
 
     public class SchoolNetLoginServiceFactory
     {
+        /// <summary>
+        /// 根据网络连接类型创建一个 ISchoolNetLoginService
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public static ISchoolNetLoginService Create(LoginConfig config)
         {
             if (config.ConnectType == "有线")

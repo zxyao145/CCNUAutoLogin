@@ -18,19 +18,25 @@ namespace CCNUAutoLogin.WinForm
         [STAThread]
         static void Main(string[] args)
         {
+            // 注册GB2312编码
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // 设置程序真实允许目录（单一程序会解压缩的目录），以写入配置文件
             Utils.RealStartupDir = AppContext.BaseDirectory;
             var fileName = Path.GetFileNameWithoutExtension(Application.ExecutablePath);
+            // 获取当前程序（单一程序）执行路径（替换扩展名.dll为.exe），以便写入注册表
             Utils.ExecutablePath =  Path.Combine(Directory.GetCurrentDirectory(), fileName + ".exe");
            
+            // 判断是否是管理员身份运行
             WindowsPrincipal winPrincipal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
             bool isAdmin = winPrincipal.IsInRole(WindowsBuiltInRole.Administrator);
             if (isAdmin)
             {
+                // 以管理员身份运行，判断有没参数
+                // 第一个参数表示是否允许开机自启
                 if (args != null && args.Length > 0)
                 {
                     var autoStartup = Convert.ToBoolean(args[0]);
@@ -39,9 +45,11 @@ namespace CCNUAutoLogin.WinForm
                     {
                         AutoStartup = autoStartup
                     };
-                    var savePath = AppConfigIO.Write<AppConfig>(config, "app.config");
+                    var _ = AppConfigIO.Write<AppConfig>(config, "app.config");
                 }
             }
+
+            // 程序运行主窗体
             Application.Run(new MainForm());
         }
     }

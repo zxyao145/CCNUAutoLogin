@@ -3,6 +3,9 @@ using System.IO;
 
 namespace CCNUAutoLogin.Core
 {
+    /// <summary>
+    /// 日志记录
+    /// </summary>
     static class LogHelper
     {
         private static readonly string LogsDir;

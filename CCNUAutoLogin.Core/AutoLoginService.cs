@@ -3,6 +3,9 @@ using System.Threading;
 
 namespace CCNUAutoLogin.Core
 {
+    /// <summary>
+    /// 自动登陆服务，每10分钟检测一次是否断网
+    /// </summary>
     public class AutoLoginService:IDisposable
     {
         public AutoLoginService(LoginConfig config)
@@ -33,6 +36,9 @@ namespace CCNUAutoLogin.Core
             }
         }
 
+        /// <summary>
+        /// 停止监测
+        /// </summary>
         public void Stop()
         {
             _timer?.Change(0, -1);
@@ -40,6 +46,11 @@ namespace CCNUAutoLogin.Core
             _loginService = null;
         }
 
+        /// <summary>
+        /// 更新配置
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
         public bool UpdateConfig(LoginConfig config)
         {
             _loginService?.Logout();
@@ -47,6 +58,10 @@ namespace CCNUAutoLogin.Core
             return AutoLogin();
         }
 
+        /// <summary>
+        /// 5次自动登陆尝试
+        /// </summary>
+        /// <returns></returns>
         private bool AutoLogin()
         {
             var retryTimes = 5;
@@ -85,6 +100,10 @@ namespace CCNUAutoLogin.Core
             return SchoolNetLoginServiceBase.IsOnline();
         }
 
+        /// <summary>
+        /// 手动登陆
+        /// </summary>
+        /// <returns></returns>
         public bool LoginManual()
         {
             return SchoolNetLoginServiceBase.IsOnline() || AutoLogin();

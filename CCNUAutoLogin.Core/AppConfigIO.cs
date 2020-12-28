@@ -6,6 +6,9 @@ using Jil;
 
 namespace CCNUAutoLogin.Core
 {
+    /// <summary>
+    /// 配置文件读写
+    /// </summary>
     public class AppConfigIO
     {
         private static string GetDefaultConfigPath(string configFileName = "config.json")
@@ -14,7 +17,7 @@ namespace CCNUAutoLogin.Core
         }
 
         /// <summary>
-        /// login config
+        /// 写 登陆信息配置
         /// </summary>
         /// <param name="config"></param>
         /// <param name="configPath"></param>
@@ -25,7 +28,7 @@ namespace CCNUAutoLogin.Core
         }
 
         /// <summary>
-        /// login config
+        /// 读 登陆信息配置
         /// </summary>
         /// <param name="configPath"></param>
         /// <returns></returns>
@@ -34,7 +37,12 @@ namespace CCNUAutoLogin.Core
             return Read<LoginConfig>("config.json");
         }
 
-
+        /// <summary>
+        /// 写 配置文件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="configFileName"></param>
+        /// <returns></returns>
         public static T Read<T>(string configFileName)
         {
             var configPath = GetDefaultConfigPath(configFileName);
@@ -53,6 +61,13 @@ namespace CCNUAutoLogin.Core
             return default(T);
         }
 
+        /// <summary>
+        /// 读 配置文件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="config"></param>
+        /// <param name="configFileName"></param>
+        /// <returns></returns>
         public static string Write<T>(T config, string configFileName)
         {
             var configPath = GetDefaultConfigPath(configFileName);

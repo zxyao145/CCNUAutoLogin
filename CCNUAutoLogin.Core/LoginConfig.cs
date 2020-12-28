@@ -1,5 +1,8 @@
 ﻿namespace CCNUAutoLogin.Core
 {
+    /// <summary>
+    /// 登陆信息配置
+    /// </summary>
     public class LoginConfig
     {
         /// <summary>

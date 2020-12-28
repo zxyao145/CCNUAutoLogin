@@ -1,23 +1,31 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Security;
-using System.Security.Permissions;
-using System.Text;
 
 namespace CCNUAutoLogin.Core
 {
 
     /// <summary>
-    /// 开机自启
+    /// 开机自启 copy from SSR Project
     /// </summary>
     public class AutoStartup
     {
+        /// <summary>
+        /// 注册表 key
+        /// </summary>
         static string Key = "CCNUAutoLogin";
+        /// <summary>
+        /// 注册表 路径
+        /// </summary>
         static string RegistryRunPath = (IntPtr.Size == 4
             ? @"Software\Microsoft\Windows\CurrentVersion\Run"
             : @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run");
 
+        /// <summary>
+        /// 设置 是否 开机启动
+        /// </summary>
+        /// <param name="enabled"></param>
+        /// <returns></returns>
         public static bool Set(bool enabled)
         {
             RegistryKey runKey = null;
@@ -65,6 +73,10 @@ namespace CCNUAutoLogin.Core
             }
         }
 
+        /// <summary>
+        /// 开机启动切换
+        /// </summary>
+        /// <returns></returns>
         public static bool Switch()
         {
             bool enabled = !Check();
@@ -110,6 +122,10 @@ namespace CCNUAutoLogin.Core
             }
         }
 
+        /// <summary>
+        /// 监测是否已经允许开机启动
+        /// </summary>
+        /// <returns></returns>
         public static bool Check()
         {
             RegistryKey runKey = null;

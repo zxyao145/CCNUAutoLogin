@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Net.Mime;
-using System.Text;
+﻿using System.Diagnostics;
 
 namespace CCNUAutoLogin.Core
 {
     public class Utils
     {
+        /// <summary>
+        /// 程序真实允许目录，单一程序会进行解压缩
+        /// Windows下一般是%temp%/.net/CCNUAutoLogin/{hash}
+        /// </summary>
         public static string RealStartupDir { get; set; }
 
+        /// <summary>
+        /// 程序（单一程序）执行路径
+        /// </summary>
         public static string ExecutablePath { get; set; }
+
+        /// <summary>
+        /// 以管理员身份运行
+        /// </summary>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
         public static int RunAsAdmin(string arguments = "")
         {
             Process process = null;

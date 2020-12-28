@@ -33,7 +33,6 @@ namespace CCNUAutoLogin.WinForm
         public MainForm()
         {
             InitializeComponent();
-            this.password.PasswordChar = '*';
             this.ShowInTaskbar = true;
             this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
             CheckIsAutoStartup();
@@ -45,15 +44,19 @@ namespace CCNUAutoLogin.WinForm
             else
             {
                 HideForm();
+                _autoLoginService = new AutoLoginService(config);
+                _autoLoginService.Start();
             }
 
-            _autoLoginService?.Start();
+            #region appNotifyIcon 邮件菜单事件绑定
 
             configApp.Click += ConfigApp_Click;
             exitApp.Click += ExitApp_Click;
             loginManual.Click += LoginManual_Click;
             autoStartup.Click += AutoStartup_Click;
-            openConfigDir.Click += OpenConfigDir_Click;
+            openConfigDir.Click += OpenConfigDir_Click; 
+
+            #endregion
         }
         
         /// <summary>
@@ -96,7 +99,6 @@ namespace CCNUAutoLogin.WinForm
             var config = AppConfigIO.Read();
             if (config != null)
             {
-                _autoLoginService = new AutoLoginService(config);
                 schoolNum.Text = config.SchNum;
                 password.Text = config.Password;
                 foreach (Control control in netTypePanel.Controls)
@@ -225,6 +227,11 @@ namespace CCNUAutoLogin.WinForm
 
         #region 主窗口事件
 
+        /// <summary>
+        /// Notify被点击时候切换配置窗体显示与隐藏的状态
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void appNotifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)//判断鼠标的按键
@@ -234,6 +241,11 @@ namespace CCNUAutoLogin.WinForm
             }
         }
 
+        /// <summary>
+        /// 网络类型切换时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnNetTypeChanged(object sender, EventArgs e)
         {
             if (sender is RadioButton rtb)
@@ -242,6 +254,11 @@ namespace CCNUAutoLogin.WinForm
             }
         }
 
+        /// <summary>
+        /// 网络连接类型切换时
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnLanOrWlanTypeChanged(object sender, EventArgs e)
         {
             if (sender is RadioButton rtb)
@@ -251,7 +268,7 @@ namespace CCNUAutoLogin.WinForm
         }
 
         /// <summary>
-        /// 保存
+        /// 保存配置
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
