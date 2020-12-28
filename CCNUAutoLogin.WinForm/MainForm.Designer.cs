@@ -149,7 +149,7 @@ namespace CCNUAutoLogin.WinForm
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "校园网";
             this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.OnNetTypeChanged);
+            this.radioButton1.Click += new System.EventHandler(this.OnNetTypeChanged);
             // 
             // radioButton2
             // 
@@ -162,6 +162,7 @@ namespace CCNUAutoLogin.WinForm
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "联通";
             this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButton2.Click += new System.EventHandler(this.OnNetTypeChanged);
             // 
             // netTypePanel
             // 
@@ -184,6 +185,7 @@ namespace CCNUAutoLogin.WinForm
             this.radioButton4.TabStop = true;
             this.radioButton4.Text = "电信";
             this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButton4.Click += new System.EventHandler(this.OnNetTypeChanged);
             // 
             // radioButton3
             // 
@@ -195,6 +197,7 @@ namespace CCNUAutoLogin.WinForm
             this.radioButton3.TabStop = true;
             this.radioButton3.Text = "移动";
             this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButton3.Click += new System.EventHandler(this.OnNetTypeChanged);
             // 
             // connectTypePanel
             // 
@@ -216,6 +219,7 @@ namespace CCNUAutoLogin.WinForm
             this.radioButton7.TabStop = true;
             this.radioButton7.Text = "无线";
             this.radioButton7.UseVisualStyleBackColor = true;
+            this.radioButton7.Click += new System.EventHandler(this.OnLanOrWlanTypeChanged);
             // 
             // radioButton8
             // 
@@ -226,7 +230,7 @@ namespace CCNUAutoLogin.WinForm
             this.radioButton8.TabIndex = 7;
             this.radioButton8.Text = "有线";
             this.radioButton8.UseVisualStyleBackColor = true;
-            this.radioButton8.AppearanceChanged += new System.EventHandler(this.OnLanOrWlanTypeChanged);
+            this.radioButton8.Click += new System.EventHandler(this.OnLanOrWlanTypeChanged);
             // 
             // btnSave
             // 
