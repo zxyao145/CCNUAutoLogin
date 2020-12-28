@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using CCNUAutoLogin.Core;
 using Jil;
@@ -253,56 +255,60 @@ namespace CCNUAutoLogin.WinForm
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnSave_Click(object sender, EventArgs e)
+        private async void btnSave_Click(object sender, EventArgs e)
         {
-            var config = new LoginConfig()
+            await Task.Run(() =>
             {
-                SchNum = schoolNum.Text,
-                Password = password.Text,
-                ConnectType = _connectType,
-                SchNetType = _schNetType
-            };
-
-            if (Verify(config))
-            {
-                var configPath = AppConfigIO.Write(config);
-                if (_autoLoginService == null)
+                var config = new LoginConfig()
                 {
-                    _autoLoginService = new AutoLoginService(config);
-                    _autoLoginService?.Start();
-                }
-                else
+                    SchNum = schoolNum.Text,
+                    Password = password.Text,
+                    ConnectType = _connectType,
+                    SchNetType = _schNetType
+                };
+                if (Verify(config))
                 {
-                    _autoLoginService.UpdateConfig(config);
-                }
-
-                MessageBox.Show(this, $"信息保存成功！{Environment.NewLine} {configPath}", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                if (!_isAutoStartup)
-                {
-                    if (AutoStartup.Set(true))
+                    var configPath = AppConfigIO.Write(config);
+                    if (_autoLoginService == null)
                     {
-                        // TriggerShowOrHide();
-                        _isAutoStartup = true;
-                        AppConfigIO.Write<AppConfig>(new AppConfig
-                        {
-                            AutoStartup = _isAutoStartup
-                        }, "app.config");
-                        HideForm();
+                        _autoLoginService = new AutoLoginService(config);
+                        _autoLoginService?.Start();
                     }
                     else
                     {
-                        var dialogResult = MessageBox.Show(this, "开机自启动需要管理员的权限，是否以管理员权限运行？", "提示", MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Question);
-                        if (dialogResult == DialogResult.Yes)
+                        _autoLoginService.UpdateConfig(config);
+                    }
+
+                    MessageBox.Show($"信息保存成功！{Environment.NewLine} {configPath}", "提示", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    if (!_isAutoStartup)
+                    {
+                        if (AutoStartup.Set(true))
                         {
-                            Utils.RunAsAdmin("true");
-                            Dispose();
-                            Close();
+                            // TriggerShowOrHide();
+                            _isAutoStartup = true;
+                            AppConfigIO.Write<AppConfig>(new AppConfig
+                            {
+                                AutoStartup = _isAutoStartup
+                            }, "app.config");
+                            HideForm();
+                        }
+                        else
+                        {
+                            var dialogResult = MessageBox.Show("开机自启动需要管理员的权限，是否以管理员权限运行？", "提示",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Question);
+                            if (dialogResult == DialogResult.Yes)
+                            {
+                                Utils.RunAsAdmin("true");
+                                Dispose();
+                                Close();
+                            }
                         }
                     }
                 }
-            }
+            });
         }
 
         #endregion
