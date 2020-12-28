@@ -143,7 +143,7 @@ namespace CCNUAutoLogin.WinForm
 
             if (!AutoStartup.Set(_isAutoStartup))
             {
-                var dialogResult = MessageBox.Show(this, "设置或取消开机启动需要管理员的权限，是否以管理员权限运行？", "提示", MessageBoxButtons.YesNo,
+                var dialogResult = MessageBox.Show("设置或取消开机启动需要管理员的权限，是否以管理员权限运行？", "提示", MessageBoxButtons.YesNo,
                     MessageBoxIcon.Question);
                 if (dialogResult == DialogResult.Yes)
                 {
@@ -183,11 +183,11 @@ namespace CCNUAutoLogin.WinForm
             {
                 var isSuccess = _autoLoginService.LoginManual();
                 var msg = isSuccess ? "手动登陆成功！" : "手动登陆失败！";
-                MessageBox.Show(this, msg, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(msg, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                MessageBox.Show(this, "请先配置登陆信息！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("请先配置登陆信息！", "错误", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
         }
