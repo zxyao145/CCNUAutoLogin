@@ -46,5 +46,36 @@ namespace CCNUAutoLogin.Core
             }
             return -1;
         }
+
+        /// <summary>
+        /// 以管理员身份运行
+        /// </summary>
+        /// <param name="arguments"></param>
+        /// <returns></returns>
+        public static int ReStart(string arguments = "")
+        {
+            Process process = null;
+            ProcessStartInfo processInfo = new ProcessStartInfo
+            {
+                FileName = ExecutablePath,
+                Arguments = arguments,
+                UseShellExecute = true
+            };
+            try
+            {
+                process = Process.Start(processInfo);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                return -1;
+            }
+
+            if (process != null)
+            {
+                process.Close();
+                return 0;
+            }
+            return -1;
+        }
     }
 }

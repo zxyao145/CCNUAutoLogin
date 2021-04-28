@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 CCNUAutoLogin.Service
+/CCNUAutoLogin.WinForm/config.json

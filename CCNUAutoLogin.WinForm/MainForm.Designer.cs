@@ -136,9 +136,9 @@ namespace CCNUAutoLogin.WinForm
             // 
             this.password.Location = new System.Drawing.Point(95, 49);
             this.password.Name = "password";
+            this.password.PasswordChar = '*';
             this.password.Size = new System.Drawing.Size(228, 27);
             this.password.TabIndex = 2;
-            this.password.PasswordChar = '*';
             // 
             // radioButton1
             // 

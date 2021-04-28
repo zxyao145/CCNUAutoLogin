@@ -50,7 +50,15 @@ namespace CCNUAutoLogin.WinForm
             }
 
             // 程序运行主窗体
-            Application.Run(new MainForm());
+            try
+            {
+                Application.Run(new MainForm());
+            }
+            catch (Exception e)
+            {
+                LogHelper.WriteError("程序发生致命错误：" + e);
+                Utils.ReStart();
+            }
         }
     }
 }

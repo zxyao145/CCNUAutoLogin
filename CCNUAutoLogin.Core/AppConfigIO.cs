@@ -46,6 +46,7 @@ namespace CCNUAutoLogin.Core
         public static T Read<T>(string configFileName)
         {
             var configPath = GetDefaultConfigPath(configFileName);
+            LogHelper.WriteInfo("读取配置文件：" + configPath);
             if (File.Exists(configPath))
             {
                 string jsonInfo;
