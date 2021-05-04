@@ -51,6 +51,8 @@ namespace CCNUAutoLogin.WinForm
             this.radioButton7 = new System.Windows.Forms.RadioButton();
             this.radioButton8 = new System.Windows.Forms.RadioButton();
             this.btnSave = new System.Windows.Forms.Button();
+            this.onlineMonitorInterval = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.appNotificationContextMenuStrip.SuspendLayout();
             this.netTypePanel.SuspendLayout();
             this.connectTypePanel.SuspendLayout();
@@ -171,7 +173,7 @@ namespace CCNUAutoLogin.WinForm
             this.netTypePanel.Controls.Add(this.radioButton4);
             this.netTypePanel.Controls.Add(this.radioButton3);
             this.netTypePanel.Controls.Add(this.radioButton2);
-            this.netTypePanel.Location = new System.Drawing.Point(50, 80);
+            this.netTypePanel.Location = new System.Drawing.Point(50, 120);
             this.netTypePanel.Name = "netTypePanel";
             this.netTypePanel.Size = new System.Drawing.Size(282, 38);
             this.netTypePanel.TabIndex = 3;
@@ -204,7 +206,7 @@ namespace CCNUAutoLogin.WinForm
             // 
             this.connectTypePanel.Controls.Add(this.radioButton7);
             this.connectTypePanel.Controls.Add(this.radioButton8);
-            this.connectTypePanel.Location = new System.Drawing.Point(50, 124);
+            this.connectTypePanel.Location = new System.Drawing.Point(50, 164);
             this.connectTypePanel.Name = "connectTypePanel";
             this.connectTypePanel.Size = new System.Drawing.Size(282, 38);
             this.connectTypePanel.TabIndex = 3;
@@ -235,19 +237,39 @@ namespace CCNUAutoLogin.WinForm
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(50, 168);
+            this.btnSave.Location = new System.Drawing.Point(50, 208);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(273, 38);
+            this.btnSave.Size = new System.Drawing.Size(280, 38);
             this.btnSave.TabIndex = 9;
             this.btnSave.Text = "保存";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // onlineMonitorInterval
+            // 
+            this.onlineMonitorInterval.Location = new System.Drawing.Point(166, 83);
+            this.onlineMonitorInterval.Name = "onlineMonitorInterval";
+            this.onlineMonitorInterval.Size = new System.Drawing.Size(158, 27);
+            this.onlineMonitorInterval.TabIndex = 11;
+            this.onlineMonitorInterval.Text = "300000";
+            this.onlineMonitorInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(51, 86);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(109, 20);
+            this.label2.TabIndex = 10;
+            this.label2.Text = "监控时间(毫秒)";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 227);
+            this.ClientSize = new System.Drawing.Size(374, 254);
+            this.Controls.Add(this.onlineMonitorInterval);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.connectTypePanel);
             this.Controls.Add(this.netTypePanel);
@@ -294,5 +316,7 @@ namespace CCNUAutoLogin.WinForm
         private System.Windows.Forms.ToolStripMenuItem loginManual;
         private System.Windows.Forms.ToolStripMenuItem autoStartup;
         private System.Windows.Forms.ToolStripMenuItem openConfigDir;
+        private System.Windows.Forms.TextBox onlineMonitorInterval;
+        private System.Windows.Forms.Label label2;
     }
 }

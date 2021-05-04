@@ -18,7 +18,7 @@ namespace CCNUAutoLogin.Core
 
         public void Start()
         {
-            var timeInterval = 10 * 60 * 1000;//每10分钟
+            var timeInterval = _config.OnlineMonitorInterval;//每10分钟
             try
             {
                 _timer = new Timer(state =>
@@ -54,6 +54,10 @@ namespace CCNUAutoLogin.Core
         public bool UpdateConfig(LoginConfig config)
         {
             _loginService?.Logout();
+            if (config.OnlineMonitorInterval != _config.OnlineMonitorInterval)
+            {
+                _timer.Change(0, config.OnlineMonitorInterval);
+            }
             _config = config;
             return AutoLogin();
         }

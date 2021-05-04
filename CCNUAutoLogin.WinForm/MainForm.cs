@@ -101,6 +101,8 @@ namespace CCNUAutoLogin.WinForm
             {
                 schoolNum.Text = config.SchNum;
                 password.Text = config.Password;
+                onlineMonitorInterval.Text = config.OnlineMonitorInterval.ToString();
+
                 foreach (Control control in netTypePanel.Controls)
                 {
                     if (control is RadioButton rBtn)
@@ -274,6 +276,8 @@ namespace CCNUAutoLogin.WinForm
         /// <param name="e"></param>
         private async void btnSave_Click(object sender, EventArgs e)
         {
+            btnSave.Enabled = false;
+            HideForm();
             await Task.Run(() =>
             {
                 var config = new LoginConfig()
@@ -283,7 +287,7 @@ namespace CCNUAutoLogin.WinForm
                     ConnectType = _connectType,
                     SchNetType = _schNetType
                 };
-                if (Verify(config))
+                if (Verify(config, onlineMonitorInterval.Text))
                 {
                     var configPath = AppConfigIO.Write(config);
                     if (_autoLoginService == null)
@@ -326,6 +330,7 @@ namespace CCNUAutoLogin.WinForm
                     }
                 }
             });
+            btnSave.Enabled = true;
         }
 
         #endregion
@@ -334,8 +339,9 @@ namespace CCNUAutoLogin.WinForm
         /// 验证config是否有效
         /// </summary>
         /// <param name="config"></param>
+        /// <param name="onlineMonitorIntervalText"></param>
         /// <returns>true：有效；false：无效</returns>
-        private bool Verify(LoginConfig config)
+        private bool Verify(LoginConfig config, string onlineMonitorIntervalText)
         {
             var messages = new List<string>();
             if (config.SchNum.IsNullOrWhiteSpace())
@@ -356,6 +362,23 @@ namespace CCNUAutoLogin.WinForm
             {
                 messages.Add("校园网连接类型错误！");
             }
+
+            if (int.TryParse(onlineMonitorIntervalText, out var onlineMonitorIntervalVal))
+            {
+                if (onlineMonitorIntervalVal < 1000 * 10)
+                {
+                    messages.Add("监测时间间隔最小为 10000毫秒（10秒）");
+                }
+                else
+                {
+                    config.OnlineMonitorInterval = onlineMonitorIntervalVal;
+                }
+            }
+            else
+            {
+                messages.Add("监测时间只能为数字");
+            }
+
 
             if (messages.Count > 0)
             {

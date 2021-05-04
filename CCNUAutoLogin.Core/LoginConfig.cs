@@ -6,6 +6,11 @@
     public class LoginConfig
     {
         /// <summary>
+        /// 网络在线监测时间，默认5分钟：5 *60 * 1000 = 300000;
+        /// </summary>
+        public int OnlineMonitorInterval { get; set; } = 300000;
+
+        /// <summary>
         /// 学号
         /// </summary>
         public string SchNum { get; set; }
