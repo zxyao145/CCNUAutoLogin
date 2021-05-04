@@ -117,7 +117,7 @@ namespace CCNUAutoLogin.WinForm
                 {
                     if (control is RadioButton rBtn)
                     {
-                        if (rBtn.Text == config.SchNetType)
+                        if (rBtn.Text == config.ConnectType)
                         {
                             rBtn.Checked = true;
                             break;
