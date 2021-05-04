@@ -253,6 +253,7 @@ namespace CCNUAutoLogin.WinForm
             this.onlineMonitorInterval.TabIndex = 11;
             this.onlineMonitorInterval.Text = "300000";
             this.onlineMonitorInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.onlineMonitorInterval.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.onlineMonitorInterval_KeyPress);
             // 
             // label2
             // 

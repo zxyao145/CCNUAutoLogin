@@ -441,9 +441,31 @@ namespace CCNUAutoLogin.WinForm
         {
             _autoLoginService?.Dispose();
             base.OnClosed(e);
-        } 
+        }
 
         #endregion
+
+        private void onlineMonitorInterval_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //判断按键是不是数字和删除（backspace）
+            if ((e.KeyChar < 48 || e.KeyChar > 57) && e.KeyChar != 8)
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                // 禁止首字母为0
+                var txt = onlineMonitorInterval.Text;
+                if ((txt.Length == 0) || (onlineMonitorInterval.SelectionLength == txt.Length))
+                {
+                    if (e.KeyChar == 48)
+                    {
+                        e.Handled = true;
+
+                    }
+                }
+            }
+        }
     }
 
     static class Extensions
